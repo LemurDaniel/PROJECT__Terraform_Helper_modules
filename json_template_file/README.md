@@ -41,6 +41,9 @@ Appending a List vs a Map:
 
 Note:
   - Allows only for one insertion per line in the JSON-File.
+  - Meaning all insertions need to be seperated by linebreaks and can't be compressed into a single one-line-JSON-String:
+    - "windows": "{{./azure_vm/windows/*.azure_update_schedule.json}}",
+    - "linux": "{{./azure_vm/linux/*.azure_update_schedule.json}}"
 
 ```JSON
 {
