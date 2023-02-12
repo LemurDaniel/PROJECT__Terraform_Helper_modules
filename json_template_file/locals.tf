@@ -12,7 +12,7 @@ locals {
 
 
 
-  # Gets for any regexmatch, all the files at the filepaths as a map of: { filename => file_content } to replace in the json.
+  # Gets for any regexmatch the replacement_identiert ('{{path}}' sequence in json-template) and the contained filepath as an array.
   regex_captures_replace_as_map = {
     # Caputes formats of "{{./some_path}}" => !Inludes Quotations, to replace the whole string with an json-object.
     for replace_identifier in regexall("\"{{[^{}]+}}\"", local.json_template_file_content) :
@@ -25,7 +25,7 @@ locals {
     }
   }
 
-  # Gets for any regexmatch, all the files at the filepaths as a list of: [ file_content ] to replace in the json.
+  # Gets for any regexmatch the replacement_identiert ('[[path]]' sequence in json-template) and the contained filepath as an array.
   regex_captures_replace_as_list = {
     # Caputes formats of "[[./some_path]]" => !Inludes Quotations, to replace the whole string with an json-list.
     for replace_identifier in regexall("\"\\[\\[[^\\[\\]]+\\]\\]\"", local.json_template_file_content) :
@@ -49,7 +49,7 @@ locals {
     }
   }
 
-  # Read all files for each replacement with the injection type 'AsMap'
+  # Read all files for each replacement with the injection type 'AsMap', as replace_identifier => { file_name => filecontent_jsondecoded }
   files_to_inject_as_map = {
     for replace_identifier, config in local.regex_captures_replace_correct_filepath :
     replace_identifier => {
@@ -59,7 +59,7 @@ locals {
     if config.injection_type == "AsMap"
   }
 
-  # Read all files for each replacement with the injection type 'AsList'
+  # Read all files for each replacement with the injection type 'AsList', as replace_identifier => [ filecontent_jsondecoded ]
   files_to_inject_as_list = {
     for replace_identifier, config in local.regex_captures_replace_correct_filepath :
     replace_identifier => [
