@@ -39,6 +39,8 @@ Appending a List vs a Map:
 - Putting the Path into Curley-Brackets `'{{}}'` creates a Map
 - Putting the Path into Square-Brackets `'[[]]'` creates a List
 
+Note:
+  - Allows only for one insertion per line in the JSON-File.
 
 ```JSON
 {
