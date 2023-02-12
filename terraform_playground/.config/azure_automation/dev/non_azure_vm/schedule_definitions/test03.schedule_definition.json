@@ -1,0 +1,22 @@
+{
+    "short_name": "test",
+    "os": [
+        {
+            "type": "windows",
+            "tiers": {
+                "t0": [
+                    "default"
+                ],
+                "tctx": [
+                    "default"
+                ],
+                "t1": [
+                    "default"
+                ],
+                "t2": [
+                    "default"
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "name": "automation",
+    "resource_group_name": "automationaccount",
+    "log_analytics_linked_service": true,
+    "azurevm_config": {
+        "schedule_trigger_version": 1,
+        "subscriptions": [
+            "",
+            ""
+        ],
+        "scheduled_updates_configurations": {
+            "windows": "{{./azure_vm/windows/*.azure_update_schedule.json}}",
+            "linux": "{{./azure_vm/linux/*.azure_update_schedule.json}}"
+        }
+    },
+    "nonazurevm_config": {
+        "enabled": true,
+        "schedule_trigger_version": 4,
+        "schedule_defaults": "{{./non_azure_vm/schedule_defaults/*.schedule_default.json}}",
+        "schedule_definitions": "[[./non_azure_vm/schedule_definitions/*.schedule_definition.json]]"
+    },
+    "monitoring_config": {
+        "enable_alerts": true,
+        "enable_default_alert_configuration": true,
+        "action_groups": [],
+        "custom_metric_alerts": {},
+        "custom_log_alerts": {}
+    }
+}

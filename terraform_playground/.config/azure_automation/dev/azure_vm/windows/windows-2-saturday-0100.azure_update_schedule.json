@@ -1,0 +1,23 @@
+{
+  "update_types": "Critical, Security, UpdateRollup, ServicePack, Definition, Updates",
+  "rebootSetting": "IfRequired",
+  "duration": 2,
+  "interval": 1,
+  "time_zone": "Europe/Berlin",
+  "start_time": 100,
+  "frequency": "Month",
+  "excludes": [],
+  "advancedSchedule": {
+    "monthlyOccurrences": [
+      {
+        "occurrence": 2,
+        "day": "saturday"
+      }
+    ]
+  },
+  "query_tags": {
+    "acfVMUpdateSchedule": [
+      "2-saturday-0100"
+    ]
+  }
+}

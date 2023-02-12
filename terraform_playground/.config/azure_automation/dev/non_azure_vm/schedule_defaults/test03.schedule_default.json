@@ -1,0 +1,10 @@
+{
+    "update_types": "Critical, Definition",
+    "rebootSetting": "IfRequired",
+    "duration": 2,
+    "interval": 1,
+    "time_zone": "Europe/Berlin",
+    "start_time": 2300,
+    "frequency": "Week",
+    "excludes": []
+}
