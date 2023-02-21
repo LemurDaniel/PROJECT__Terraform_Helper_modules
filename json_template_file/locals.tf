@@ -54,7 +54,7 @@ locals {
     for replace_identifier, config in local.regex_captures_replace_correct_filepath :
     replace_identifier => {
       for file in fileset(config.file_path, config.file_filter) :
-      "${split(".", file)[0]}" => jsondecode(file(format("%s/%s", config.file_path, file)))
+      split(".", file)[0] => jsondecode(file(format("%s/%s", config.file_path, file)))
     }
     if config.injection_type == "AsMap"
   }
