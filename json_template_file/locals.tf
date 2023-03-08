@@ -1,7 +1,7 @@
 
 locals {
 
-  json_template_file_path_abs  = abspath(format("%s/%s", path.root, var.json_template_file_path))
+  json_template_file_path_abs  = abspath(var.json_template_file_path) #abspath(format("%s/%s", path.root, var.json_template_file_path))
   json_template_file_directory = join("/", slice(split("/", local.json_template_file_path_abs), 0, length(split("/", local.json_template_file_path_abs)) - 1))
 
   json_template_file_name      = split("/", local.json_template_file_path_abs)[length(split("/", local.json_template_file_path_abs)) - 1]
