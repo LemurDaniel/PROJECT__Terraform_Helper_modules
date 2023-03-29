@@ -75,7 +75,8 @@ locals {
   result_configuration = join("\n",
     # Splits the String into lines and checks on each line for possible replacment, then joins all lines back together.
     [
-      for line in split("\n", local.json_template_file_content) :
+      # Ignore empty lines in template_json with compact.
+      for line in compact(split("\n", local.json_template_file_content)) :
       # Runs a subloop on all replacments, if found, takes the first one from that list, else takes the unmodified line from the list.
       compact(
         # No replacment result in an empty list, which gets removed by compact after flatten.
