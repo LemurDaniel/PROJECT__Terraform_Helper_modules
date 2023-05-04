@@ -61,7 +61,7 @@ locals {
 ####################################################################################################
 
 module "json_template_subfiles" {
-  source = "./json_template_file__wrapper_depth_4"
+  source = "./wrapper_depth_3"
 
   for_each = local.regex_captures_replace_correct_filepath
 

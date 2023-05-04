@@ -59,9 +59,9 @@ locals {
 ####################################################################################################
 ###### Either 'json_template_file__wrapper_depth_X' or 'locals for injecting' for last depth layer injection
 ####################################################################################################
-
+/*
 module "json_template_subfiles" {
-  source = "./wrapper_depth_2"
+  source = "./json_template_file__wrapper_depth_2"
 
   for_each = local.regex_captures_replace_correct_filepath
 
@@ -76,8 +76,8 @@ locals {
     values(module.json_template_subfiles)[*].injection_result
   )
 }
+*/
 
-/*
 locals {
 
   # Locals for injecting
@@ -123,7 +123,7 @@ locals {
   final_injection__identifier_to_injection_map = merge(values(local.injection_results)...)
 
 }
-*/
+
 
 ####################################################################################################
 ###### Create JSON-File with all Injections
