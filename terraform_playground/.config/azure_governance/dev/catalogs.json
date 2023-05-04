@@ -9,6 +9,13 @@
     {
         "published": false,
         "externally_visible": false,
+        "display_name": "Catalog 1",
+        "description": "Some description for Catalog 1 bla bla",
+        "access_packages": "{{./acf_solution/*.access_package.json}}"
+    },
+    {
+        "published": false,
+        "externally_visible": false,
         "display_name": "Catalog 2",
         "description": "Some description for Catalog 2 bla bla",
         "access_packages": "{{./packages_2/*.access_package.json}}"

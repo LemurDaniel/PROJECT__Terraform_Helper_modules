@@ -23,10 +23,3 @@ output "result_configuration" {
   description = "Outputs the resulting configuration of the JSON-Template with all injected values as a terrform object"
   value       = jsondecode(local.result_configuration)
 }
-
-
-
-
-output "debug" {
-  value = module.json_template_subfiles
-}
