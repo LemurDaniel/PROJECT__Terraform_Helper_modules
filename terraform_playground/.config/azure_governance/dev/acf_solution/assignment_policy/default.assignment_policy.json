@@ -1,0 +1,33 @@
+{
+    "description": "default Policy",
+    "display_name": "default Policy",
+    "extension_enabled": true,
+    "expiration": {
+        "duration_in_days": 365
+    },
+    "requestor_settings": {
+        "requestors": [
+            {
+                "object_id": "123",
+                "subject_type": "singleUser"
+            }
+        ]
+    },
+    "approval_settings": {
+        "approval_required": true,
+        "approval_required_for_extension": true,
+        "requestor_justification_required": true,
+        "stages": [
+            {
+                "approver_justification_required": true,
+                "approval_timeout_in_days": 8,
+                "primary_approver": {
+                    "object_id": "123",
+                    "subject_type": "singleUser"
+                }
+            }
+        ]
+    },
+    "questions": null,
+    "assignment_review_settings": null
+}

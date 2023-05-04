@@ -1,0 +1,12 @@
+{
+    "description": "Test Policy",
+    "display_name": "Test Policy",
+    "extension_enabled": true,
+    "expiration": {
+        "duration_in_days": 120
+    },
+    "requestor_settings": null,
+    "approval_settings": null,
+    "questions": null,
+    "assignment_review_settings": null
+}

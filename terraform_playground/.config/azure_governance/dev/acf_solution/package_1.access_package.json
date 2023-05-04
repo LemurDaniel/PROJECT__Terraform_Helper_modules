@@ -1,0 +1,8 @@
+{
+    "meta": {
+        "hidden": true,
+        "display_name": "Test 1",
+        "description": "Testing"
+    },
+    "assignment_policy": "{{./assignment_policy/default.assignment_policy.json}}"
+}

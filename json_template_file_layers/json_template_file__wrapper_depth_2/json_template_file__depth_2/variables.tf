@@ -5,3 +5,10 @@ variable "json_template_file_path" {
   nullable    = false
   type        = string
 }
+
+
+variable "allow_recursion" {
+  description = "value"
+  type        = bool
+  default     = true
+}

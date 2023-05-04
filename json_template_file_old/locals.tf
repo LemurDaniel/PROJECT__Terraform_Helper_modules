@@ -10,7 +10,10 @@ locals {
   # Read the JSON-File in which certain files will be injected as maps or lists.
   json_template_file_content = file(local.json_template_file_path_abs) # Not JSON-Decoded for injecting later into JSON-String!
 
+}
 
+
+locals {
 
   # Gets for any regexmatch the replacement_identiert ('{{path}}' sequence in json-template) and the contained filepath as an array.
   regex_captures_replace_as_map = {
@@ -19,7 +22,7 @@ locals {
     replace(
       replace_identifier, "/([\\[\\]\\*])/", "\\$1"
       ) => {
-      # The path as an array in the JSON-Template-file.
+      # The path to the to be inserted Json-Files, as an array in the JSON-Template-file.
       file_path_array = split("/", replace(replace_identifier, "/[{}\"]+/", ""))
       injection_type  = "AsMap"
     }
@@ -32,7 +35,7 @@ locals {
     replace(
       replace_identifier, "/([\\[\\]\\*])/", "\\$1"
       ) => {
-      # The path as an array in the JSON-Template-file.
+      # The path to the to be inserted Json-Files, as an array in the JSON-Template-file.
       file_path_array = split("/", replace(replace_identifier, "/[\\[\\]\"]+/", ""))
       injection_type  = "AsList"
     }
@@ -43,34 +46,68 @@ locals {
   regex_captures_replace_correct_filepath = {
     for replace_identifier, config in merge(local.regex_captures_replace_as_map, local.regex_captures_replace_as_list) :
     replace_identifier => {
-      file_path      = format("%s/%s", local.json_template_file_directory, join("/", slice(config.file_path_array, 0, length(config.file_path_array) - 1)))
-      file_filter    = config.file_path_array[length(config.file_path_array) - 1]
-      injection_type = config.injection_type
+      folder_path = format("%s/%s", local.json_template_file_directory, join("/", slice(config.file_path_array, 0, length(config.file_path_array) - 1)))
+      file_filter = config.file_path_array[length(config.file_path_array) - 1]
+      injection_type = config.injection_type == "AsList" ? "AsList" : (
+        can(regex("[/*]+", config.file_path_array[length(config.file_path_array) - 1])) ? "AsMap" : "AsSingle"
+      )
     }
   }
+
+}
+
+locals {
+
+  # Locals for injecting
 
   # Read all files for each replacement with the injection type 'AsMap', as replace_identifier => { file_name => filecontent_jsondecoded }
-  files_to_inject_as_map = {
-    for replace_identifier, config in local.regex_captures_replace_correct_filepath :
-    replace_identifier => {
-      for file in fileset(config.file_path, config.file_filter) :
-      split(".", file)[0] => jsondecode(file(format("%s/%s", config.file_path, file)))
+
+  injection_results = {
+
+
+    AsSingle = {
+      for replace_identifier, config in local.regex_captures_replace_correct_filepath :
+      replace_identifier => [
+        for file in fileset(config.folder_path, config.file_filter) :
+        jsondecode(file(format("%s/%s", config.folder_path, file)))
+      ][0]
+      if config.injection_type == "AsSingle"
     }
-    if config.injection_type == "AsMap"
+
+
+    AsMap = {
+      for replace_identifier, config in local.regex_captures_replace_correct_filepath :
+      replace_identifier => {
+        for file in fileset(config.folder_path, config.file_filter) :
+        split(".", file)[0] => jsondecode(file(format("%s/%s", config.folder_path, file)))
+      }
+      if config.injection_type == "AsMap"
+    }
+
+
+    # Read all files for each replacement with the injection type 'AsList', as replace_identifier => [ filecontent_jsondecoded ]
+    AsList = {
+      for replace_identifier, config in local.regex_captures_replace_correct_filepath :
+      replace_identifier => [
+        for file in fileset(config.folder_path, config.file_filter) :
+        jsondecode(file(format("%s/%s", config.folder_path, file)))
+      ]
+      if config.injection_type == "AsList"
+    }
+
+
   }
 
-  # Read all files for each replacement with the injection type 'AsList', as replace_identifier => [ filecontent_jsondecoded ]
-  files_to_inject_as_list = {
-    for replace_identifier, config in local.regex_captures_replace_correct_filepath :
-    replace_identifier => [
-      for file in fileset(config.file_path, config.file_filter) :
-      jsondecode(file(format("%s/%s", config.file_path, file)))
-    ]
-    if config.injection_type == "AsList"
-  }
+  final_injection__identifier_to_injection_map = merge(values(local.injection_results)...)
+
+}
 
 
-  files_to_inject_merged = merge(local.files_to_inject_as_map, local.files_to_inject_as_list)
+####################################################################################################
+###### Create JSON-File with all Injections
+####################################################################################################
+
+locals {
 
   result_configuration = join("\n",
     # Splits the String into lines and checks on each line for possible replacment, then joins all lines back together.
@@ -82,8 +119,8 @@ locals {
         # No replacment result in an empty list, which gets removed by compact after flatten.
         flatten([
           [
-            for replace_identifier, injected_values in local.files_to_inject_merged :
-            replace(line, "/${replace_identifier}/", jsonencode(injected_values))
+            for replace_identifier, injection_content in local.final_injection__identifier_to_injection_map :
+            replace(line, "/${replace_identifier}/", jsonencode(injection_content))
             if can(regex(replace_identifier, line))
           ], [line]
         ])
