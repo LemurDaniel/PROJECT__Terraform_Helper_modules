@@ -4,14 +4,26 @@
         "externally_visible": false,
         "display_name": "Catalog 1",
         "description": "Some description for Catalog 1 bla bla",
-        "access_packages": "{{./acf_solution/*.access_package.json}}"
-    },
-    {
-        "published": false,
-        "externally_visible": false,
-        "display_name": "Catalog 1",
-        "description": "Some description for Catalog 1 bla bla",
-        "access_packages": "{{./acf_solution/*.access_package.json}}"
+        "access_packages": {
+            "package_1": {
+                "hidden": true,
+                "display_name": "Test 1 (365)",
+                "description": "Testing",
+                "assignment_policy": "{{./assignment_policy/default_365.assignment_policy.json}}"
+            },
+            "package_2": {
+                "hidden": true,
+                "display_name": "Test 2 (120)",
+                "description": "Testing",
+                "assignment_policy": "{{./assignment_policy/default_120.assignment_policy.json}}"
+            },
+            "package_3": {
+                "hidden": true,
+                "display_name": "Test 3 (120)",
+                "description": "Testing",
+                "assignment_policy": "{{./assignment_policy/default_120.assignment_policy.json}}"
+            }
+        }
     },
     {
         "published": false,
