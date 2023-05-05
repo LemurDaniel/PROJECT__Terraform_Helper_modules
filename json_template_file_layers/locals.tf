@@ -71,7 +71,7 @@ module "json_template_subfiles" {
 
 }
 locals {
-  final_injection__identifier_to_injection_map = zipmap(
+  final_injection_identifier_to_injection_map = zipmap(
     keys(module.json_template_subfiles),
     values(module.json_template_subfiles)[*].injection_result
   )
@@ -118,7 +118,7 @@ locals {
 
   }
 
-  final_injection__identifier_to_injection_map = merge(values(local.injection_results)...)
+  final_injection_identifier_to_injection_map = merge(values(local.injection_results)...)
 
 }
 */
@@ -139,7 +139,7 @@ locals {
         # No replacment result in an empty list, which gets removed by compact after flatten.
         flatten([
           [
-            for replace_identifier, injection_content in local.final_injection__identifier_to_injection_map :
+            for replace_identifier, injection_content in local.final_injection_identifier_to_injection_map :
             replace(line, "/${replace_identifier}/", jsonencode(injection_content))
             if can(regex(replace_identifier, line))
           ], [line]

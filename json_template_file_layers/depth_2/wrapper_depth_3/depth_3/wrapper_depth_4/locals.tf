@@ -16,8 +16,8 @@ locals {
 
 
 
-module "json_template_file_depth_2" {
-  source = "./depth_2"
+module "json_template_file__depth_4" {
+  source = "./depth_4"
 
   for_each = local.files_at_file_path
 
@@ -32,19 +32,19 @@ locals {
   injection_results = {
 
     AsSingle = jsondecode(
-      length(module.json_template_file_depth_2) == 0 ? "{}" : (
-      values(module.json_template_file_depth_2)[0].result_configuration_json_string)
+      length(module.json_template_file__depth_4) == 0 ? "{}" : (
+      values(module.json_template_file__depth_4)[0].result_configuration_json_string)
     )
 
     AsMap = {
       for file, config in local.files_at_file_path :
-      config.file_base_name => module.json_template_file_depth_2[file].result_configuration
+      config.file_base_name => module.json_template_file__depth_4[file].result_configuration
       if var.injection_type == "AsMap"
     }
 
     AsList = [
       for file, config in local.files_at_file_path :
-      module.json_template_file_depth_2[file].result_configuration
+      module.json_template_file__depth_4[file].result_configuration
       if var.injection_type == "AsList"
     ]
 
