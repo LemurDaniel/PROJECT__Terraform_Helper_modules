@@ -17,7 +17,7 @@ resource "local_file" "debug_json_out_with_appended_files" {
 #########################################################################################
 
 module "json_template_file" {
-  source = ".././json_template_file_layers"
+  source = "../.././json_template_file_layers"
 
   json_template_file_path = format(".config/azure_governance/%s/catalogs.json", local.environment)
 }
