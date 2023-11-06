@@ -6,7 +6,7 @@ provider "modtm" {
   enabled = true
   # The endpoint where to send data from CRUD-Operations.
   # In this case some smee.io for quick-testing: https://smee.io
-  endpoint = "https://smee.io/Tz0YJOr6dWymTuuQ"
+  endpoint = "https://smee.io/2jJKtIliKXISwNO"
 }
 
 
@@ -23,16 +23,36 @@ provider "modtm" {
   CREATE:   This happens on apply and resource creation.
             For example when the module is first used and all its resources (as well as 'modtm_telemetry') are created.
 
+
   READ:     This happens whenever the resource is read by a terraform refresh. 
             For example when performing a terraform plan.
 
+            NOTE: 
+              - Reads are only performed during the 'plan'-step.
+                - In case of 'terraform plan .tfplan' and then 'terraform apply .tfplan', the read is only performed during 'terraform plan'
+                - In case of 'terraform apply' the read is only performed during the automatic 'plan'-step.
+
+              - Reads are not performed when the 'refresh' is set to false.
+                - 'terraform plan -refresh=false' performs no read operation on resources.
+                - 'terraform apply -refresh=false' performs no read operation on resources.
+
+
+
   UPDATE:   This happens whenever the resources is updated. 
             For example the module version gets updated and the maintainer changed the 'modtm_telemetry'-tags for both module-versions.
+
+            NOTE:
+              - Update is only called when a resource is changed. A Replacement will first cause a 'DELETE' and then a 'CREATE'.
 
 
   DELETE:   This happens whenever the resource is deleted. 
             For exmaple by removing the module or performing 'terraform destroy'.
 
+
+  NOTE:
+    - The Read-Operation only sends data during the plan-step.
+    - The other-Operations only send data during the apply-step.
+    - A failed Request won't fail a plan or apply.
 
   A basic request with all data is send to the specifed endpoint on each of these Operations.
   The received request can look like this:
@@ -73,7 +93,7 @@ resource "modtm_telemetry" "test_1" {
     avm_git_commit           = "2724cc167e90f94ce2511c3fb803400d0a486743"
     avm_git_file             = "main.tf"
     avm_git_last_modified_at = "2023-06-05 02:21:33"
-    avm_git_org              = "Azure"
+    avm_git_org              = "Azures"
     avm_git_repo             = "terraform-provider-modtel"
   }
 
