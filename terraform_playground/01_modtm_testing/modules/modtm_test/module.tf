@@ -89,7 +89,10 @@ resource "modtm_telemetry" "test_1" {
       }
     )
 
-
+    #  Of course these can also refernce locals, variables and resources and anything can be send.
+    #  But such data should be used with caution and be data protection compliant.
+    deployed_virtual_network = var.virtual_network_config != null
+    # number_of_vnets_deployed = ...
     avm_git_commit           = "2724cc167e90f94ce2511c3fb803400d0a486743"
     avm_git_file             = "main.tf"
     avm_git_last_modified_at = "2023-06-05 02:21:33"
